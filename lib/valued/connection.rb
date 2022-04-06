@@ -5,7 +5,7 @@ class Valued::Connection
 
   def initialize(project_id:, token:, endpoint: ENDPOINT)
     @executer   = Concurrent::SingleThreadExecutor.new
-    @endpoint   = URI(ENDPOINT)
+    @endpoint   = URI(endpoint)
     @token      = token
     @project_id = project_id
   end
