@@ -29,5 +29,5 @@ class Valued::Connection
     Net::HTTP.post(@endpoint, payload.to_json,
       "Content-Type" => "application/json",
       "Authorization" => "Bearer #{@token}")
-    end
+  end
 end
