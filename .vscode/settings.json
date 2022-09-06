@@ -2,5 +2,7 @@
   "files.exclude": {
     "coverage": true,
     "Gemfile.lock": true,
+    "docs": true,
+    ".yardoc": true,
   }
 }
