@@ -7,6 +7,7 @@ require "time"
 module Valued
   require "valued/helpers"
   require "valued/client"
+  require "valued/data"
   require "valued/connection"
   require "valued/scope"
 
@@ -17,6 +18,10 @@ module Valued
     @scope  = Scope.new(@client)
     @client
   end
+
+  def self.disconnect = @client = @scope = nil
+
+  def self.connected? = !!@client
 
   def self.client
     return @client if defined? @client and @client

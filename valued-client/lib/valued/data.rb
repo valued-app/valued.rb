@@ -22,20 +22,23 @@ module Valued::Data
 
   def normalize(data)
     case data
-    when Valued::Scope        then data.to_h
-    when Hash                 then data.inject({}) { |h, (k, v)| set(h, k, v) }.freeze
-    when Array                then data.map { normalize(_1) }.freeze
-    when Symbol               then data.name
-    when Time, DateTime, Date then data.iso8601
+    when String                        then data.frozen? ? data : data.dup.freeze
+    when Integer, true, false          then data
+    when Valued::Scope                 then data.to_h
+    when Hash                          then data.inject({}) { |h, (k, v)| set(h, k, v) }.freeze
+    when Concurrent::Map               then normalize(data.each_pair.to_h)
+    when Array, Set, Concurrent::Tuple then data.map { normalize(_1) }.freeze
+    when Symbol                        then data.name
+    when Time, DateTime, Date          then data.iso8601.freeze
     else
       return normalize(data.to_valued_data) if data.respond_to?(:to_valued_data)
       data.class.ancestors.each do |type|
         next unless callback = REGISTER[type]
+        return normalize(callback.call(data))
       end
+      data
     end
   end
-
-  private
 
   def merge(data, new_data)
     data.merge(new_data) do |key, old_value, new_value|
@@ -43,33 +46,31 @@ module Valued::Data
       new_value
     end.freeze
   end
-
-  private
-
-  def validate_action(data)
-    yield("Missing user or customer") unless data["user"] || data["customer"]
-    yield("Customer data is missing an id") if data["customer"] && !data["customer"]["id"]
-    yield("User data is missing an id") if data["user"] && !data["user"]["id"]
-  end
-
-  def validate_pageview(data)
-    yield("Missing user") unless data["user"] && data["user"]["id"]
-    yield("Missing attributes") unless data["attributes"]
-    yield("Missing attributes.url") unless data["attributes"]["url"]
-  end
-
-  def validate_sync(data)
-    yield("Missing user or customer") unless data["user"] || data["customer"]
-    yield("Cannot include both user and customer") unless data["user"] ** data["customer"]
-  end
   
   def normalize_keys(*keys)
     keys.flatten.flat_map { _1.to_s.split(".") }
   end
 
+  private
+
+  def validate_action(data)
+    yield("Missing user.id or customer.id") unless data.dig("user", "id") || data.dig("customer", "id")
+  end
+
+  def validate_pageview(data)
+    yield("Missing user.id") unless data.dig("user", "id")
+    yield("Missing attributes.url") unless data.dig("attributes", "source", "url")
+  end
+
+  def validate_sync(data)
+    yield("Missing user.id or customer.id") unless data.dig("user", "id") || data.dig("customer", "id")
+    yield("Cannot include both user and customer") if data["user"] && data["customer"]
+  end
+
   def set(data, key, value)
     *parents, key = normalize_keys(key)
     parents.inject(data) { _1[_2] ||= {} }[key] = normalize(value)
+    parents.inject(data) { _1[_2].freeze }
     data
   end
 end

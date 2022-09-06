@@ -2,7 +2,7 @@
 
 ## Simple usage
 
-You can create a `Valued::Client` instance and call `action`, `pageview`, `sync` etc directly on the client.
+You can create a `Valued::Client` instance and call `action`, `page_view`, `sync` etc directly on the client.
 
 ``` ruby
 require "valued"
@@ -14,7 +14,7 @@ token = ENV.fetch("VALUED_TOKEN") # or wherever you store credentials
 client = Valued::Client.new(token)
 
 # Record a page view event for the user with the id 123
-client.pageview("https://big.company.com/learn/to/waltz", "user.id" => 123)
+client.page_view("https://big.company.com/learn/to/waltz", "user.id" => 123)
 
 # Record an action
 client.action("report.generated", {
@@ -42,13 +42,27 @@ scope["user.id"] = 123
 
 # user nagivates to customer with id 12
 scope.with("customer.id" => 12) do
-  scope.pageview("https://big.company.com/reports/12")
+  scope.page_view("https://big.company.com/reports/12")
   scope.action("report.generated")
 end
 
 # trigger an action without a customer
-scope.pageview("https://big.company.com/profile")
+scope.page_view("https://big.company.com/profile")
 scope.action("profile.updated")
+```
+
+This is also handy for building up sync data:
+
+``` ruby
+scope.user = {
+  id: 42, name: "Arthur Dent", email: "sandwich-maker@example.com"
+}
+
+scope.customer = {
+  id: 1, name: "BBC Radio"
+}
+
+scope.sync
 ```
 
 ## Global scope
@@ -64,12 +78,12 @@ Valued.scope do
 
   # user nagivates to customer with id 12
   Valued.with("customer.id" => 12) do
-    Valued.pageview("https://big.company.com/reports/12")
+    Valued.page_view("https://big.company.com/reports/12")
     Valued.action("report.generated")
   end
 
   # trigger an action without a customer
-  Valued.pageview("https://big.company.com/profile")
+  Valued.page_view("https://big.company.com/profile")
   Valued.action("profile.updated")
 end
 ```

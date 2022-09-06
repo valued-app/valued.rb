@@ -1,5 +1,3 @@
-require "valued"
-
 # This class does low-level connection handling:
 # * Convert input arguments to a connection callback, via {Valued::Connection.build}.
 # * Implement the default connection callback, via {Valued::Connection#call}.
@@ -24,14 +22,14 @@ class Valued::Connection
   attr_reader :headers
 
   # Executes a connection callback in a background executor.
-  def self.call(connection, data) = executor.pool { connection.call(data) }
+  def self.call(connection, data) = executor.post { connection.call(data) }
 
   # @!attribute [rw] executor
   #   @return [Concurrent::Executor, #pool] executor used to send requests in the background
   #   @note Writing to this attribute is not thread-safe. It should be done before any requests are sent.
   #   @see https://ruby-concurrency.github.io/concurrent-ruby/master/file.thread_pools.html
   def self.executor
-    return @executor if defined?(@executor)
+    return @executor if defined?(@executor) && @executor
     MUTEX.synchronize do
       @executor ||= case environment
         when "development" then Concurrent::SingleThreadExecutor.new

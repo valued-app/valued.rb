@@ -1,5 +1,3 @@
-require "valued"
-
 class Valued::Scope
   include Valued::Helpers
 
