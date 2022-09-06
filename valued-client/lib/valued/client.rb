@@ -66,7 +66,6 @@ class Valued::Client
   # @param data [Hash, Scope] The customer data to send with the event.
   # @return [void]
   def sync_customer(data) = sync("customer" => data)
-    
 
   private
 
