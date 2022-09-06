@@ -1,11 +1,33 @@
+# Module to deal with data normalization, validation, and merging.
+# Used internally.
 module Valued::Data
   extend self
 
   REGISTER = {}
   private_constant :REGISTER
 
+  # Registers normalization logic for a given class.
+  #
+  # @example
+  #   Valued::Data.register(User) { |user| user.to_h }
+  #
+  # @param type [Class, Module] the class to register normalization logic for
+  # @yield [object] the normalization logic
+  # @yieldparam object [Object] the object to normalize (which will be a instance of `type`)
+  # @yieldreturn [Object] the partially normalized data – will be run through `Valued::Data.normalize` again
+  # @!scope class
   def register(type, &block) = REGISTER[type] = block
 
+  # Normalizes and validates data.
+  #
+  # @example
+  #   Valued::Data.validate("user.id" => 1) { raise "invalid payload: #{_1}" }
+  #
+  # @param data [Object] the data to normalize and validate
+  # @yield [error] called for every validation error
+  # @yieldparam error [String] the error message
+  # @return [Object] the normalized data
+  # @!scope class
   def validate(data, &block)
     data = normalize(data)
     case data["category"]
@@ -18,8 +40,21 @@ module Valued::Data
     data
   end
 
+  # @return [true, false] Wether or not the given data is valid.
+  # @param data [Object] the data to validate
+  # @see .validate
+  # @!scope class
   def valid?(data) = !!validate(data) { return false }
 
+  # Normalizes data.
+  #
+  # @example
+  #   Valued::Data.normalize("user.id" => 1)
+  #   # => { "user" => { "id" => 1 } }
+  #
+  # @param data [Object] the data to normalize
+  # @return [Object] the normalized data
+  # @!scope class
   def normalize(data)
     case data
     when String                        then data.frozen? ? data : data.dup.freeze
@@ -40,13 +75,24 @@ module Valued::Data
     end
   end
 
+  # Deep merges two hashes.
+  #
+  # @api private
+  # @!scope class
   def merge(data, new_data)
     data.merge(new_data) do |key, old_value, new_value|
       new_value = merge(old_value, new_value) if old_value.is_a?(Hash) && new_value.is_a?(Hash)
       new_value
     end.freeze
   end
-  
+
+  # Turns a key or list of keys into a normalized list of keys for nesting.
+  # 
+  # @example
+  #   Valued::Data.normalize_keys("user.id") # => ["user", "id"]
+  #
+  # @api private
+  # @!scope class
   def normalize_keys(*keys)
     keys.flatten.flat_map { _1.to_s.split(".") }
   end

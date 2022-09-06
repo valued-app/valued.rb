@@ -22,12 +22,14 @@ class Valued::Connection
   attr_reader :headers
 
   # Executes a connection callback in a background executor.
+  # @param connection [Valued::Connection, #call] The connection callback to execute.
+  # @param data [Hash] The data to send.
+  # @return [void]
+  # @see #executor
   def self.call(connection, data) = executor.post { connection.call(data) }
 
-  # @!attribute [rw] executor
-  #   @return [Concurrent::Executor, #pool] executor used to send requests in the background
-  #   @note Writing to this attribute is not thread-safe. It should be done before any requests are sent.
-  #   @see https://ruby-concurrency.github.io/concurrent-ruby/master/file.thread_pools.html
+  # @return [Concurrent::Executor, #pool] executor used to send requests in the background
+  # @see https://ruby-concurrency.github.io/concurrent-ruby/master/file.thread_pools.html
   def self.executor
     return @executor if defined?(@executor) && @executor
     MUTEX.synchronize do
@@ -39,6 +41,11 @@ class Valued::Connection
     end
   end
 
+  # Explicitely sets the executor used to send requests in the background.
+  # @oaram [Concurrent::Executor, #pool] executor used to send requests in the background
+  # @note Changing the executor is not thread-safe. It should be done before any requests are sent.
+  # @see https://ruby-concurrency.github.io/concurrent-ruby/master/file.thread_pools.html
+  # @return [void]
   def self.executor=(executor)
     @executor = executor
   end

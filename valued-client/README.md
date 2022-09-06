@@ -1,5 +1,14 @@
 # Valued Ruby client
 
+A Ruby client library for sending events to [Valued](https://valued.app).
+
+This library:
+* Is well tested (100% test coverage).
+* Does not make assumptions about your application/library desgin.
+* Does not patch any external classes or modules.
+* Only depends on one other gem (concurrent-ruby).
+* Is considered thread-safe.
+
 ## Simple usage
 
 You can create a `Valued::Client` instance and call `action`, `page_view`, `sync` etc directly on the client.

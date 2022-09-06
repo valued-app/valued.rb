@@ -1,36 +1,43 @@
+# Client objects can be used directly (or indirectly, via {Scope}, {Helpers}, or {Valued}) to send events to the Valued event ingestions API.
+#
+# @example
+#   client = Valued::Client.new(token)
+#
+#   # Send a user.created action even to Valued
+#   cleint.action("user.created", user: { id: 1 })
 class Valued::Client
   # @return [Valued::Connection, #call] connection objected called every time data is to be sent to the Valued API
   # @api private
   attr_reader :connection
 
-  # @overload new(token)
+  # @see #initialize
+  # @return [Valued::Client] either a new client or the client passed in as argument
+  def self.new(*args) = args.first.is_a?(Valued::Client) ? args.first : super
+
+  # @overload initialize(token)
   #   @param token [String] The Valued API token.
-  #   @return [Valued::Client] A new client.
   #
-  # @overload new(client)
+  # @overload initialize(client)
   #   @param client [Valued::Client] A Valued client.
-  #   @return [Valued::Client] The client passed in.
   #
-  # @overload new(token, endpoint)
+  # @overload initialize(token, endpoint)
   #   @param token [String] The Valued API token.
   #   @param endpoint [String, URI] The Valued API endpoint.
-  #   @return [Valued::Client] A new client.
   #
-  # @overload new(callback)
+  # @overload initialize(callback)
   #   @param callback [Proc, #call] A connection callback.
-  #   @return [Valued::Client] A new client.
   #
-  # @overload new(*args, &block)
+  # @overload initialize(*args, &block)
   #   @param args [Array] The arguments to pass to the block, after the data argument.
   #   @yield [data, *args] For each request, calls the callback with the data to be sent and the arguments.
   #   @yieldparam data [Hash] The data to be sent.
   #   @yieldparam args [Array] The arguments passed to {Valued::Client.new}.
-  #   @return [Valued::Client] A new client.
-  def self.new(*args) = args.first.is_a?(Valued::Client) ? args.first : super
-
-  # @private
   def initialize(...) = @connection = Valued::Connection.build(...)
 
+  # Tracks a page view event.
+  # @param url [String, URI] The URL of the page.
+  # @param data [Hash, Scope] The data to send with the event.
+  # @return [void]
   def pageview(url = nil, data)
     data = Valued::Data.merge(data, "attributes.source.url" => url) if url
     raise ArgumentError, "Missing data hash" if url.nil? && !data.is_a?(Hash)
@@ -39,13 +46,25 @@ class Valued::Client
 
   alias_method :page_view, :pageview
 
+  # Tracks an action event.
+  # @param key [String] The action key.
+  # @param data [Hash, Scope] The data to send with the event.
+  # @return [void]
   def action(key, data) = send_event("action", data.merge("key" => key))
+
+  # Sends a sync event.
+  # @param data [Hash, Scope] The data to send with the event.
+  # @return [void]
   def sync(data) = send_event("sync", data)
 
-  # @todo some smarter user data collection here
+  # Sends a sync event for the user data.
+  # @param data [Hash, Scope] The user data to send with the event.
+  # @return [void]
   def sync_user(data) = sync("user" => data)
   
-  # @todo some smarter customer data collection here
+  # Sends a sync event for the customer data.
+  # @param data [Hash, Scope] The customer data to send with the event.
+  # @return [void]
   def sync_customer(data) = sync("customer" => data)
     
 
