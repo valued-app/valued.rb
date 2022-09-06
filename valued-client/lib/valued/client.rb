@@ -4,7 +4,7 @@
 #   client = Valued::Client.new(token)
 #
 #   # Send a user.created action even to Valued
-#   cleint.action("user.created", user: { id: 1 })
+#   client.action("user.created", user: { id: 1 })
 class Valued::Client
   # @return [Valued::Connection, #call] connection objected called every time data is to be sent to the Valued API
   # @api private
