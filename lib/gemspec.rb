@@ -1,9 +1,9 @@
+require_relative "../valued-client/lib/valued/version"
+
 # @see Gemspec.new
-module Gemspec
-  VERSION = File.read("#{__dir__}/../VERSION").strip
-  
+module Gemspec  
   # Helper method to generate a new gemspec.
-  def self.new(name: File.basename(Dir.pwd), version: VERSION, **options)
+  def self.new(name: File.basename(Dir.pwd), version: Valued::VERSION, **options)
     Gem::Specification.new(name, version) do |spec|
       # Set the default attributes
       spec.author                = "Highly Valued, Inc."
@@ -19,7 +19,7 @@ module Gemspec
       }
   
       # Depend on valued-client (except for valued-client itself)
-      spec.add_runtime_dependency "valued-client", VERSION if name != "valued-client"
+      spec.add_runtime_dependency "valued-client", Valued::VERSION if name != "valued-client"
 
       # apply all options
       options.each { spec.send("#{_1}=", _2) }

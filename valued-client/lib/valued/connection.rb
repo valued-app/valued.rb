@@ -91,7 +91,8 @@ class Valued::Connection
     @endpoint = URI(endpoint)
     @headers = {
       "Content-Type" => "application/json",
-      "Authorization" => "Bearer #{token}"
+      "Authorization" => "Bearer #{token}",
+      "User-Agent" => "valued-client/#{Valued::VERSION} (Ruby/#{RUBY_VERSION})",
     }
   end
 

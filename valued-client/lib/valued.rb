@@ -13,6 +13,7 @@ module Valued
   require "valued/data"
   require "valued/connection"
   require "valued/scope"
+  require "valued/version"
 
   extend Helpers
 
