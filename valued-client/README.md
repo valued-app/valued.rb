@@ -154,6 +154,23 @@ Valued::Data.register(User) {{ id: _1.id, location: _1.location }}
 Valued::Data.register(Location) {{ country: _1.country, region: _1.region }}
 ```
 
+## Custom HTTP client
+
+By default, `Valued::Client` will use `Net::HTTP` for sending events. You can replace the HTTP client used by either passing a block to `Valued::Client.new`/`Valued.connect`, or any object that implements `#call`.
+
+``` ruby
+require "faraday"
+token    = ENV.fetch("VALUED_TOKEN")
+endpoint = ENV["VALUED_ENDPOINT"] || "https://ingres.valued.app/events"
+
+Valued.connect do |data|
+  Faraday.post(endpoint, data.to_json, {
+    "Content-Type"  => "application/json",
+    "Authorization" => "Bearer #{token}"
+  })
+end
+```
+
 ## Known issues
 
 This gem is incompatible with the [valued](https://rubygems.org/gems/valued) gem.
