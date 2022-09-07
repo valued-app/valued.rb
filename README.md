@@ -1,40 +1,32 @@
-# Ruby Client for [Valued](https://valued.app/)
+# Valued Ruby SDK
 
-Events are sent asynchronously to not block your application.
+This repository contains two separate gems:
 
-## Using Global State
+* [valued-client](valued-client) – a general purpose Ruby client for Valued.
+* [valued-rails](valued-rails) – a Rails plugin for Valued.
+
+In addition, there is a simple Sinatra application in [dummy-api](dummy-api) that can be used as an endpoint to point client libraries to.
+
+## Development
+
+Task                         | Command
+-----------------------------|---------------------
+Installing dependencies      | `bundle install`
+Running test                 | `rake test`
+Generating API documentation | `rake docs`
+
+You can also run both tasks combined with `rake`. These will generate a `docs` and a `coverage` directory.
+
+
+## Using Gems straight from GitHub
+
+If you want to use more than one of the gems in this repository directly from the main branch, you can do so by adding the following to your Gemfile:
 
 ``` ruby
-Valued.connect(token: ENV["VALUED_TOKEN"], project_id: ENV["VALUED_PROJECT"])
+source "https://rubygems.org"
 
-# trigger an even without predefined scope
-Valued.track("access.user.invite", {
-  client_id: account.id,
-  user_id: current_user.id,
-  invited_user: invited_user.id
-})
-
-# Set an execution scope for tracked events
-Valued.scope(client_id: account.id, user_id: current_used.id) do
-  Valued.track("access.user.signin")
-  Valued.track("access.user.invite", invited_user: invited_user.id)
+github "valued-app/valued.rb" do
+  gem "valued-client"
+  gem "valued-rails"
 end
-```
-
-## Multiple Connection / Avoid Global State
-
-``` ruby
-connection = Valued::Connection.new(token: ENV["VALUED_TOKEN"], project_id: ENV["VALUED_PROJECT"])
-
-# trigger an even without predefined scope
-connection.track("access.user.invite", {
-  client_id: account.id,
-  user_id: current_user.id,
-  invited_user: invited_user.id
-})
-
-# create a scope with predefined data
-scope = connection.scope(user_id: current_user.id, account_id: account.id)
-scope.track("access.user.signin")
-scope.track("access.user.invite", invited_user: invited_user.id)
 ```
