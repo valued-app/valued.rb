@@ -7,7 +7,7 @@ This library:
 * Does not make assumptions about your application/library desgin.
 * Does not patch any external classes or modules.
 * Only depends on one other gem (concurrent-ruby).
-* Is considered thread-safe.
+* Is considered thread-safe and compatible with all common concurrency models (multi-threading, forking, actors, event loops, etc).
 
 ## Simple usage
 
@@ -169,6 +169,34 @@ Valued.connect do |data|
     "Authorization" => "Bearer #{token}"
   })
 end
+```
+
+## Background processing
+
+By default, this library will send events to Valued out of band to not unnecessarily block your business logic. The only exception is if a test environment is detected, in which case the HTTP requests will be sent synchronously.
+
+You have control this behavior by setting a custom `executor`:
+
+``` ruby
+# use a fixed threadpool
+Valued::Connection.executor = Concurrent::FixedThreadPool.new(5)
+
+# disable background processing
+Valued::Connection.executor = Concurrent::ImmediateExecutor.new
+```
+
+You can also reuse an existing executor to avoid a dedicated background thread for Valued.
+
+You do not need to use any of the executors provided by concurrent-ruby. The only thing the `executor` needs to implement is a method called `post` that will schedule the passed block to be executed some time soon.
+
+Here is an example for using EventMachine's `defer` method:
+
+``` ruby
+class MyExecutor
+  def post(&block) = EventMachine.defer(block)
+end
+
+Valued::Connection.executor = MyExecutor.new
 ```
 
 ## Known issues
