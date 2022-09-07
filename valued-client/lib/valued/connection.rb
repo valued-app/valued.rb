@@ -42,7 +42,7 @@ class Valued::Connection
   end
 
   # Explicitely sets the executor used to send requests in the background.
-  # @oaram [Concurrent::Executor, #pool] executor used to send requests in the background
+  # @param [Concurrent::Executor, #pool] executor used to send requests in the background
   # @note Changing the executor is not thread-safe. It should be done before any requests are sent.
   # @see https://ruby-concurrency.github.io/concurrent-ruby/master/file.thread_pools.html
   # @return [void]

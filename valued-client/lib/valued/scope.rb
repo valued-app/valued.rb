@@ -23,7 +23,7 @@ class Valued::Scope
   attr_reader :defaults
 
   # @param client [Valued::Client] The client to use. See {#client}.
-  # @param defaults [Hash] Default data to initialize the scope with and to fall back to after a {#reset}. See {#defaults}.
+  # @param data [Hash] Default data to initialize the scope with and to fall back to after a {#reset}. See {#defaults}.
   def initialize(client, data = {})
     @defaults = Valued::Data.normalize(data)
     @store    = Concurrent::ThreadLocalVar.new(@defaults)
