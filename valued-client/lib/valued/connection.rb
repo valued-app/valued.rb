@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This class does low-level connection handling:
 # * Convert input arguments to a connection callback, via {Valued::Connection.build}.
 # * Implement the default connection callback, via {Valued::Connection#call}.

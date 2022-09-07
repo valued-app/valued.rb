@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Module to deal with data normalization, validation, and merging.
 # Used internally.
 module Valued::Data

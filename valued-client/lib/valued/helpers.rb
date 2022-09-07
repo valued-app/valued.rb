@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Common convenience methods shared between {Valued} and {Valued::Scope}.
 module Valued::Helpers
   # Creates a nested scope. Changes done to the data in the nested scope are

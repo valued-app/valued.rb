@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Helper class to incrementially build up event data.
 #
 # @example

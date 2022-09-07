@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Client objects can be used directly (or indirectly, via {Scope}, {Helpers}, or {Valued}) to send events to the Valued event ingestions API.
 #
 # @example
