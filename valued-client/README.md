@@ -9,6 +9,15 @@ This library:
 * Only depends on one other gem (concurrent-ruby).
 * Is considered thread-safe and compatible with all common concurrency models (multi-threading, forking, actors, event loops, etc).
 
+## Installation
+
+Add the following to your `Gemfile` and run `bundle install`:
+
+``` ruby
+gem "valued-client"
+gem "concurrent-ruby-ext", "~> 1.1" # optional, but will speed up processing
+```
+
 ## Simple usage
 
 You can create a `Valued::Client` instance and call `action`, `page_view`, `sync` etc directly on the client.
