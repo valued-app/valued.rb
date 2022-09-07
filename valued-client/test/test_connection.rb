@@ -41,4 +41,18 @@ class TestConnection < Minitest::Test
     callback = Proc.new { }
     assert_equal callback, Valued::Connection.build(callback)
   end
+
+  def test_endpoint
+    assert_equal URI("https://ingres.valued.app/events"), Valued::Connection.build("token").endpoint
+    assert_equal URI("https://example.com"), Valued::Connection.build("token", "https://example.com").endpoint
+  end
+
+  def test_headers
+    headers = Valued::Connection.build("token").headers
+    assert_equal "application/json", headers["Content-Type"]
+    assert_equal "Bearer token", headers["Authorization"]
+  end
+
+  def test_headers
+  end
 end
