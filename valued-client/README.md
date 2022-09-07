@@ -97,6 +97,16 @@ Valued.scope do
 end
 ```
 
+You can also connect an existing client instance to the global scope:
+
+``` ruby
+client = Valued::Client.new(token)
+
+# reuse client globally
+Valued.connect(client)
+Valued.action("profile.updated", "user.id" => 42)
+```
+
 ## Object mapping
 
 In the examples above, you have to construct the data hashes for users and similar objects yourself when interacting with Valued. Sometimes it would be nice if you could hand your own user and customer objects to `valued-client`:
