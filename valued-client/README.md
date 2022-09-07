@@ -194,7 +194,7 @@ Valued.connect MyBackend.new(token)
 
 By default, this library will send events to Valued out of band to not unnecessarily block your business logic. The only exception is if a test environment is detected, in which case the HTTP requests will be sent synchronously.
 
-You have control this behavior by setting a custom `executor`:
+You can control this behavior by setting a custom `executor`:
 
 ``` ruby
 # use a fixed threadpool
