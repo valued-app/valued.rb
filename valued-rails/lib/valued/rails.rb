@@ -1,7 +1,6 @@
-require "rails"
-require "valued"
+# frozen_string_literal: true
 
 module Valued::Rails
-  require "valued/rails/process_action"
-  require "valued/rails/railtie"
+  def self.setup(&block) = Setup.run(&block)
+  def self.setup? = defined?(@setup) && !!@setup
 end
