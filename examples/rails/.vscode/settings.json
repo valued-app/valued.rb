@@ -1,0 +1,9 @@
+{
+  "files.exclude": {
+    "Gemfile.lock": true,
+    "vendor": true,
+    "tmp": true,
+    "log": true,
+    "storage": true,
+  }
+}
