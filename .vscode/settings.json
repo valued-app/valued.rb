@@ -4,5 +4,6 @@
     "Gemfile.lock": true,
     "docs": true,
     ".yardoc": true,
+    "examples": true,
   }
 }
