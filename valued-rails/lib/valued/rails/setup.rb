@@ -21,4 +21,8 @@ module Valued::Rails::Setup
     Valued.connect(main.connection.client) if main.connection.client?
     Valued.connected?
   end
+
+  # @return [Valued::Client, nil]
+  # @api private
+  def self.client = main.connection.client
 end
