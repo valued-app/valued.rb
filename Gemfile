@@ -18,6 +18,7 @@ end
 
 group :dummy do
   gem 'sinatra', '~> 2.2'
+  gem 'sinatra-cors', '~> 1.2'
   gem 'puma', '~> 5.5'
   gem 'rouge', '~> 3.30'
 end
