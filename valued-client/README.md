@@ -136,7 +136,7 @@ class User
 end
 ```
 
-### Option 2: Registereing a converter
+### Option 2: Registering a converter
 
 This option is handy if you want to keep your Valued logic out of your models, or if you want to create logic for objects outside your control:
 
