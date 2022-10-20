@@ -152,7 +152,7 @@ Imagine users would have a nested location object. You could handle this in the 
 
 ``` ruby
 Valued::Data.register(User) do |user|
-  { id: user.id, locaion: { country:  user.location.country, region: user.region }}
+  { id: user.id, location: { country:  user.location.country, region: user.region }}
 end
 ```
 
