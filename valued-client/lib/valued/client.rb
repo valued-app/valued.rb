@@ -69,6 +69,45 @@ class Valued::Client
   # @return [void]
   def sync_customer(data) = sync("customer" => data)
 
+  # @example Called with a data hash
+  #   client.config({
+  #     goals : [
+  #       {
+  #         name: "This is the name of the goal",
+  #         action_key: "Portal.Expense.Created",
+  #         min_count: 5
+  #       }
+  #     ],
+  #     signals: [
+  #       {
+  #         name: "This is the name of the goal",
+  #         action_key: "Portal.Expense.Created",
+  #         min_count: 5
+  #       }
+  #     ]
+  #   })
+  #
+  # @example Called with a block
+  #   client.config do |config|
+  #     # Create or update a goal
+  #     config.add_goal("This is the name of the goal",
+  #       action_key: "Portal.Expense.Created",
+  #       min_count: 5)
+  #
+  #     # Create or update a signal
+  #     config.add_signal("This is the name of the signal",
+  #       action_key: "Portal.Expense.Created")
+  #   end
+  #
+  # @return [void]
+  def config(data = nil)
+    if block_given?
+      data = Valued::Config.new(data)
+      yield data
+    end
+    send_event("config", data: data)
+  end
+
   private
 
   def send_event(category, data)
