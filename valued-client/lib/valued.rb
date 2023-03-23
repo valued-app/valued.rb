@@ -10,6 +10,7 @@ require "time"
 module Valued
   require "valued/helpers"
   require "valued/client"
+  require "valued/config"
   require "valued/data"
   require "valued/connection"
   require "valued/scope"
