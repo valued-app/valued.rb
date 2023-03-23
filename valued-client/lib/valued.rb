@@ -112,7 +112,7 @@ module Valued
 
   # @example Called with a data hash
   #   Valued.config({
-  #     goals : [
+  #     goals: [
   #       {
   #         name: "This is the name of the goal",
   #         action_key: "Portal.Expense.Created",

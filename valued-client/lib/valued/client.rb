@@ -71,7 +71,7 @@ class Valued::Client
 
   # @example Called with a data hash
   #   client.config({
-  #     goals : [
+  #     goals: [
   #       {
   #         name: "This is the name of the goal",
   #         action_key: "Portal.Expense.Created",
