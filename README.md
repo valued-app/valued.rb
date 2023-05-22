@@ -27,6 +27,6 @@ source "https://rubygems.org"
 
 github "valued-app/valued.rb" do
   gem "valued-client"
-  gem "valued-rails"
+  # gem "valued-rails"
 end
 ```
