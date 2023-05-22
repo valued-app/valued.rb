@@ -51,6 +51,6 @@ class TestConnection < Minitest::Test
     headers = Valued::Connection.build("token").headers
     assert_equal "application/json", headers["Content-Type"]
     assert_equal "Bearer token", headers["Authorization"]
-    assert_equal "valued-client/0.0.1 (Ruby/#{RUBY_VERSION})", headers["User-Agent"]
+    assert_equal "valued-client/#{Valued::VERSION} (Ruby/#{RUBY_VERSION})", headers["User-Agent"]
   end
 end
