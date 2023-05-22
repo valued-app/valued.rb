@@ -2,5 +2,5 @@
 
 module Valued
   # The library version of valued-client.
-  VERSION = "0.0.1"
+  VERSION = "0.0.2"
 end
