@@ -70,6 +70,9 @@ module Valued
   # @return [true, false] whether a shared connection has been created
   def self.connected? = !!@client
 
+  # @return [Valued::Connection, #call, nil] the shared connection
+  def self.connection = @client&.connection
+
   # @return [Valued::Client] the shared client
   # @see .connect
   def self.client
