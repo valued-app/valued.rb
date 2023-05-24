@@ -12,7 +12,7 @@ class Valued::Connection
   private_constant :MUTEX, :ENV_KEYS
 
   # Default HTTP endpoint to send event payloads to.
-  DEFAULT_ENDPOINT = URI("https://ingres.valued.app/events")
+  DEFAULT_ENDPOINT = URI("https://ingest.valued.app/events")
 
   # @return [String] Token to authenticate against the Valued API with.
   attr_reader :token

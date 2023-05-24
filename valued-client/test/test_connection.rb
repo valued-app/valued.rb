@@ -27,7 +27,7 @@ class TestConnection < Minitest::Test
     connection = Valued::Connection.build("token")
     assert_instance_of(Valued::Connection, connection)
     assert_equal("token", connection.token)
-    assert_equal(URI("https://ingres.valued.app/events"), connection.endpoint)
+    assert_equal(URI("https://ingest.valued.app/events"), connection.endpoint)
   end
 
   def test_build_with_token_and_uri
@@ -43,7 +43,7 @@ class TestConnection < Minitest::Test
   end
 
   def test_endpoint
-    assert_equal URI("https://ingres.valued.app/events"), Valued::Connection.build("token").endpoint
+    assert_equal URI("https://ingest.valued.app/events"), Valued::Connection.build("token").endpoint
     assert_equal URI("https://example.com"), Valued::Connection.build("token", "https://example.com").endpoint
   end
 
