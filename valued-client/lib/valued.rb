@@ -10,6 +10,7 @@ require "time"
 module Valued
   require "valued/helpers"
   require "valued/client"
+  require "valued/config"
   require "valued/data"
   require "valued/connection"
   require "valued/scope"
@@ -109,6 +110,39 @@ module Valued
     return @scope unless data || block
     block ? @scope.scope(data, &block) : @scope.apply(data)
   end
+
+  # @example Called with a data hash
+  #   Valued.config({
+  #     goals: [
+  #       {
+  #         name: "This is the name of the goal",
+  #         action_key: "Portal.Expense.Created",
+  #         min_count: 5
+  #       }
+  #     ],
+  #     signals: [
+  #       {
+  #         name: "This is the name of the goal",
+  #         action_key: "Portal.Expense.Created",
+  #         min_count: 5
+  #       }
+  #     ]
+  #   })
+  #
+  # @example Called with a block
+  #   Valued.config do |config|
+  #     # Create or update a goal
+  #     config.add_goal("This is the name of the goal",
+  #       action_key: "Portal.Expense.Created",
+  #       min_count: 5)
+  #
+  #     # Create or update a signal
+  #     config.add_signal("This is the name of the signal",
+  #       action_key: "Portal.Expense.Created")
+  #   end
+  #
+  # @return [void]
+  def config(...) = client.config(...)
 
   # Resets the shared scope.
   # @see Valued::Scope#reset
