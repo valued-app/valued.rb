@@ -215,6 +215,8 @@ Valued::Connection.executor = Concurrent::ImmediateExecutor.new
 
 You can also reuse an existing executor to avoid a dedicated background thread for Valued.
 
+### Custom executors
+
 You do not need to use any of the executors provided by concurrent-ruby. The only thing the `executor` needs to implement is a method called `post` that will schedule the passed block to be executed some time soon.
 
 Here is an example for using EventMachine's `defer` method:
@@ -225,6 +227,14 @@ class MyExecutor
 end
 
 Valued::Connection.executor = MyExecutor.new
+```
+
+### Sidekiq
+
+You can also used Sidekiq to send events to Valued. This is especially handy if you already have Sidekiq set up in your application.
+
+``` ruby
+Valued::Connection.executor = Sidekiq
 ```
 
 ## Known issues

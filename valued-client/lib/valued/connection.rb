@@ -28,7 +28,17 @@ class Valued::Connection
   # @param data [Hash] The data to send.
   # @return [void]
   # @see #executor
-  def self.call(connection, data) = executor.post { connection.call(data) }
+  def self.call(connection, data)
+    if executor.respond_to?(:perform_async)
+      if connection != Valued.connection
+        token = connection.token if connection.respond_to?(:token)
+        endpoint = connection.endpoint if connection.respond_to?(:endpoint)
+      end
+      return executor.perform_async(data, token, endpoint)
+    else
+      executor.post { connection.call(data) }
+    end
+  end
 
   # @return [Concurrent::Executor, #pool] executor used to send requests in the background
   # @see https://ruby-concurrency.github.io/concurrent-ruby/master/file.thread_pools.html
@@ -49,6 +59,10 @@ class Valued::Connection
   # @see https://ruby-concurrency.github.io/concurrent-ruby/master/file.thread_pools.html
   # @return [void]
   def self.executor=(executor)
+    if defined? ::Sidekiq and executor == ::Sidekiq
+      require "valued/sidekiq"
+      executor = Valued::Sidekiq
+    end
     @executor = executor
   end
 
